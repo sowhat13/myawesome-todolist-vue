@@ -11,14 +11,16 @@
         :class="{ todofocused: todofocus }"
         @blur="todofocus = false"
       />
-      <button class="todo-card-clear" @click="this.todo = ''" v-if="this.todoLen" >X
+      <button class="todo-card-clear" @click="this.todo = ''" v-if="this.todoLen" ><i class="fas fa-times"></i>
       </button>
       <input class="todo-card-submit" type="submit" value="Add" @click="addtodo" :class="{ disabledbtn: !todoLen , submitfocused: todofocus }" 
       />
     </div>
 <ul>
     <span v-if="this.todos.length == 0">Nothing to do...</span>
-     <li v-for="showtodo in todos" :key="showtodo"> {{showtodo.text}} {{showtodo.time}}  <button class="destroy" @click="removeTodo(showtodo)">sil</button></li>
+     <li v-for="showtodo in todos" :key="showtodo"> <span class="text">{{showtodo.text}}</span>  {{showtodo.time}} 
+      <button class="delete" @click="removeTodo(showtodo)"> 
+       <i class="far fa-trash-alt"></i>   </button></li>
 
 </ul>
      
@@ -52,7 +54,7 @@ methods: {
     
   },
 
-   removeTodo: function(showtodo) {
+   removeTodo(showtodo) {
             this.todos.splice(this.todos.indexOf(showtodo), 1);
           },
 
@@ -83,6 +85,8 @@ todoLen() {
 $yellow: rgb(255, 255, 141);
 $dark: rgb(58, 58, 58);
 $gray-1: rgb(220, 220, 220) ;
+$gray-2: rgb(200, 200, 200) ;
+
 
 
 .todo-card {
@@ -130,6 +134,7 @@ $gray-1: rgb(220, 220, 220) ;
     right:20%;
     color:$dark;
     font-weight: bold;
+    cursor: pointer;
   }
 
   .todo-card-submit {
@@ -177,9 +182,33 @@ ul{
         margin:2px 0;
         display:flex;
         padding:5px 10px;
-    }
+        overflow:hidden;
+        align-items: center;
+.text {
+    width:80%;
+    overflow:hidden
 }
 
+        .delete {
+    margin-left:auto;
+    border-radius:50%;
+    width:25px;
+    height:25px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border:$gray-2 1px solid;
+    background-color:$gray-1;
+    color:$dark;
+    cursor:pointer;
+}
+
+.delete:hover {
+    background-color:$gray-2;
+}
+
+    }
+}
 
 
 </style>

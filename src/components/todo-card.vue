@@ -10,6 +10,7 @@
         v-model="todo"
         :class="{ todofocused: todofocus }"
         @blur="todofocus = false"
+        @keyup.enter="addtodo"
       />
       <button class="todo-card-clear" @click="this.todo = ''" v-if="this.todoLen" ><i class="fas fa-times"></i>
       </button>
@@ -18,32 +19,54 @@
     </div>
 <ul>
     <span v-if="this.todos.length == 0">Nothing to do...</span>
-     <li v-for="showtodo in todos" :key="showtodo"> <span class="text">{{showtodo.text}}</span>  {{showtodo.time}} 
+     <li  v-for="(showtodo, index) in todos"  :key="index"> <span class="text">{{showtodo.text}} </span>  {{showtodo.time}} 
+
+<div class="flex editdiv">
+<button @click="showtodo.editOn = !showtodo.editOn" class="delete"><i class="fas fa-pen"></i></button>
+         
+         <div
+          v-if="showtodo.editOn == true"
+           class="flex">   <input
+         
+        placeholder="Change the plan..."
+        type="text"
+        v-model="this.updatetodovalue"
+        @keyup.enter="updatedtodo(showtodo)"
+      />
+       <button class="delete2" @click="updatedtodo(showtodo)"><i class="fas fa-reply"></i></button>
+</div>
+     </div>
+
       <button class="delete" @click="removeTodo(showtodo)"> 
-       <i class="far fa-trash-alt"></i>   </button></li>
+       <i class="far fa-trash-alt"></i>   </button>
+       
+       
+       </li>
 
 </ul>
      
+
   </div>
 </template>
 
 <script>
 
 
-
 export default {
+    
 methods: {
-  clickconsole () {
-    console.log("clicked")
-  },
+
 
   addtodo() {
       if(this.todoLen) {
              this.todos.push({
-            
               text: this.todo,
               time: '',
               completed: false,
+updatetodovalue:'',
+ editOn: false,
+
+
             });
             this.todo = '';
       }
@@ -58,6 +81,28 @@ methods: {
             this.todos.splice(this.todos.indexOf(showtodo), 1);
           },
 
+          
+ 
+          
+updatedtodo(showtodo){
+    if( this.updatetodovalue.length >= 1) {
+             this.todos.splice(this.todos.indexOf(showtodo), 1 , {
+            
+              text: this.updatetodovalue,
+              time: '',
+              completed: false,
+updatetodovalue:'',
+editOn: false,
+
+            });
+      }
+      return this.updatetodovalue = ''
+       
+},
+
+
+
+
 
 } ,
 
@@ -66,7 +111,9 @@ methods: {
 computed: {
 todoLen() {
     return  this.todo.length >= 1;
-}
+},
+
+
 },
 
   data() {
@@ -74,7 +121,7 @@ todoLen() {
       todo: '',
       todofocus: false,
       todos:[ ],
-
+    
     };
   },
 };
@@ -112,16 +159,18 @@ $gray-2: rgb(200, 200, 200) ;
     display: flex;
     width: 80%;
     padding: 5px 8px;
+    padding-right:10%;
     max-height: 30px;
     border-radius: 5px 0px 0px 5px;
     outline: none !important;
     border: $gray-1  2px solid;
     border-right: none !important;
+
   }
 
   .todo-card-clear {
     display: flex;
-    width: 10%;
+    width: 8%;
    height: 30px;
     outline: none !important;
       border: transparent 2px solid;
@@ -131,7 +180,7 @@ $gray-2: rgb(200, 200, 200) ;
     align-items: center;
     justify-content: center;
     position:absolute;
-    right:20%;
+    right:18%;
     color:$dark;
     font-weight: bold;
     cursor: pointer;
@@ -201,12 +250,21 @@ ul{
     background-color:$gray-1;
     color:$dark;
     cursor:pointer;
+    outline:none;
 }
 
 .delete:hover {
     background-color:$gray-2;
 }
 
+.delete:active {
+    transform:scale(0.95)
+}
+
+    }
+
+    .editdiv {
+      margin:0px 10px;
     }
 }
 

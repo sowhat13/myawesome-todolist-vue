@@ -12,4 +12,8 @@ body {
   padding:0 !important;
 
 }
+
+.flex {
+  display:flex;
+}
 </style>
